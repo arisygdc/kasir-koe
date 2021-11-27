@@ -7,7 +7,8 @@ import (
 )
 
 type Config struct {
-	Pg_source           string        `mapstructure:"PG_SOURCE"`
+	Db_connection       string        `mapstructure:"DB_CONNECTION"`
+	Db_source           string        `mapstructure:"PG_SOURCE"`
 	ServerAddress       string        `mapstructure:"SERVER_ADDRESS"`
 	TokenSymetricKey    string        `mapstructure:"TOKEN_SYMETRIC_KEY"`
 	AccessTokenDuration time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
