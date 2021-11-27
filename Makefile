@@ -14,9 +14,9 @@ execdb:
 	docker exec -it kasir_pg psql -U postgres
 
 migrateup:
-	migrate -path migration/ -database "postgresql://postgres:123qweasd@localhost:5432/kasir?sslmode=disable" -verbose up
+	migrate -path database/migration/ -database "postgresql://postgres:123qweasd@localhost:5432/kasir?sslmode=disable" -verbose up
 
 migratedown:
-	migrate -path migration/ -database "postgresql://postgres:123qweasd@localhost:5432/kasir?sslmode=disable" -verbose down
+	migrate -path database/migration/ -database "postgresql://postgres:123qweasd@localhost:5432/kasir?sslmode=disable" -verbose down
   
 .PHONY: installpg uninstallpg startpg stoppg execdb migrateup migratedown
