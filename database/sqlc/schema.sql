@@ -1,6 +1,6 @@
 CREATE TABLE meja (
     nomor INT PRIMARY KEY,
-    dibuat_pada timestamp NULL DEFAULT NOW()
+    dibuat_pada timestamp DEFAULT NOW()
 );
 
 CREATE TABLE kategori (
@@ -11,7 +11,8 @@ CREATE TABLE kategori (
 
 CREATE TABLE menu (
     id SERIAL PRIMARY KEY,
-    kategori_id INT NOT NULL
+    kategori_id INT NOT NULL,
+    menu varchar(20) NOT NULL
 );
 
 CREATE TABLE pesanan (
