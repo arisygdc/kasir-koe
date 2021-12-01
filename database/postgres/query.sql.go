@@ -7,6 +7,15 @@ import (
 	"context"
 )
 
+const createKategori = `-- name: CreateKategori :exec
+INSERT INTO kategori (id, kategori) VALUES (DEFAULT, $1)
+`
+
+func (q *Queries) CreateKategori(ctx context.Context, kategori string) error {
+	_, err := q.db.ExecContext(ctx, createKategori, kategori)
+	return err
+}
+
 const createMeja = `-- name: CreateMeja :exec
 INSERT INTO meja (nomor, dibuat_pada) VALUES ($1, DEFAULT)
 `
