@@ -21,7 +21,6 @@ func (ctr *Controller) CreateMeja(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(403, gin.H{
 			"status": "forbidden",
-			"pesan":  err,
 		})
 		return
 	}
