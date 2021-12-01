@@ -7,8 +7,14 @@ import (
 )
 
 type Config struct {
-	Db_connection       string        `mapstructure:"DB_CONNECTION"`
+	Db_driver           string        `mapstructure:"DB_DRIVER"`
 	Db_source           string        `mapstructure:"PG_SOURCE"`
+	Db_host             string        `mapstructure:"DB_HOST"`
+	Db_port             string        `mapstructure:"DB_PORT"`
+	Db_name             string        `mapstructure:"DB_NAME"`
+	Db_username         string        `mapstructure:"DB_USERNAME"`
+	Db_password         string        `mapstructure:"DB_PASSWORD"`
+	Db_sslmode          string        `mapstructure:"DB_SSLMODE"`
 	ServerAddress       string        `mapstructure:"SERVER_ADDRESS"`
 	TokenSymetricKey    string        `mapstructure:"TOKEN_SYMETRIC_KEY"`
 	AccessTokenDuration time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
