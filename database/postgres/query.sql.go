@@ -24,3 +24,17 @@ func (q *Queries) CreateMeja(ctx context.Context, nomor int32) error {
 	_, err := q.db.ExecContext(ctx, createMeja, nomor)
 	return err
 }
+
+const createMenu = `-- name: CreateMenu :exec
+INSERT INTO menu (id, kategori_id, menu) VALUES (DEFAULT, $1, $2)
+`
+
+type CreateMenuParams struct {
+	KategoriID int32  `json:"kategori_id"`
+	Menu       string `json:"menu"`
+}
+
+func (q *Queries) CreateMenu(ctx context.Context, arg CreateMenuParams) error {
+	_, err := q.db.ExecContext(ctx, createMenu, arg.KategoriID, arg.Menu)
+	return err
+}

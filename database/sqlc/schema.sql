@@ -12,6 +12,7 @@ CREATE TABLE kategori (
 CREATE TABLE menu (
     id SERIAL PRIMARY KEY,
     kategori_id INT NOT NULL,
+    meja_nomor INT NOT NULL,
     menu varchar(20) NOT NULL
 );
 
