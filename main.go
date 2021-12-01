@@ -25,5 +25,8 @@ func main() {
 	s := r.Server.Group("API")
 	s.GET("/ping", controller.PingPong)
 	s.POST("/meja", controller.CreateMeja)
+	s.POST("/kategori", controller.CreateKategori)
+	s.POST("/menu", controller.CreateMenu)
+	s.POST("/pesanan", controller.CreatePesanan)
 	r.Run()
 }
