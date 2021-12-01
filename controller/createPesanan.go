@@ -6,22 +6,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// type DetailPesanan struct {
-// 	Menu_id int32 `json:"menu_id" binding:"required"`
-// 	Jumlah  int32 `json:"jumlah" binding:"required"`
-// }
+type DetailPesanan struct {
+	Menu_id int32 `json:"menu_id" binding:"required"`
+	Jumlah  int32 `json:"jumlah" binding:"required"`
+}
 
 type CreatePesannReq struct {
 	Kode       string          `json:"kode" binding:"required"`
 	Meja_nomor int32           `json:"meja_nomor" binding:"required"`
-	Pesanan    map[int32]int32 `json:"pesanan" binding:"required"` // Pesanan map[menu_id]jumlah
+	Pesanan    []DetailPesanan `form:"colors[]" json:"pesanan" binding:"required"`
 }
 
-func (ctr *Controller) CreatePesann(ctx *gin.Context) {
+func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 	var req CreatePesannReq
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(400, gin.H{
 			"status": "bad request",
+			"pesan":  err,
 		})
 		return
 	}
@@ -42,27 +43,45 @@ func (ctr *Controller) CreatePesann(ctx *gin.Context) {
 		},
 	)
 	if err != nil {
+		rbErr := tx.Rollback()
+		if rbErr != nil {
+			ctx.JSON(500, gin.H{
+				"status": "internal server error",
+			})
+			return
+		}
 		ctx.JSON(403, gin.H{
 			"status": "forbidden",
 		})
 		return
 	}
 
-	for m, j := range req.Pesanan {
+	pesanan_id, _ := q.GetPesananID(ctx, req.Kode)
+
+	for _, v := range req.Pesanan {
 		err := q.CreateDetailPesanan(
 			ctx, postgres.CreateDetailPesananParams{
-				PesananID: m,
-				MenuID:    m,
-				Jumlah:    j,
+				PesananID: pesanan_id,
+				MenuID:    v.Menu_id,
+				Jumlah:    v.Jumlah,
 			},
 		)
 		if err != nil {
+			rbErr := tx.Rollback()
+			if rbErr != nil {
+				ctx.JSON(500, gin.H{
+					"status": "internal server error",
+				})
+				return
+			}
 			ctx.JSON(403, gin.H{
 				"status": "forbidden",
 			})
 			return
 		}
 	}
+
+	tx.Commit()
 
 	ctx.JSON(201, gin.H{
 		"status": "created",

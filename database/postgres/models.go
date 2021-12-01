@@ -32,5 +32,6 @@ type Menu struct {
 type Pesanan struct {
 	ID          int32        `json:"id"`
 	Kode        string       `json:"kode"`
+	MejaNomor   int32        `json:"meja_nomor"`
 	DipesanPada sql.NullTime `json:"dipesan_pada"`
 }

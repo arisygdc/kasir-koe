@@ -18,6 +18,7 @@ CREATE TABLE menu (
 CREATE TABLE pesanan (
     id SERIAL PRIMARY KEY,
     kode VARCHAR(5) NOT NULL,
+    meja_nomor INT NOT NULL,
     dipesan_pada timestamp DEFAULT NOW()
 );
 

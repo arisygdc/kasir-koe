@@ -7,6 +7,21 @@ import (
 	"context"
 )
 
+const createDetailPesanan = `-- name: CreateDetailPesanan :exec
+INSERT INTO detail_pesanan (pesanan_id, menu_id, jumlah) VALUES ($1, $2, $3)
+`
+
+type CreateDetailPesananParams struct {
+	PesananID int32 `json:"pesanan_id"`
+	MenuID    int32 `json:"menu_id"`
+	Jumlah    int32 `json:"jumlah"`
+}
+
+func (q *Queries) CreateDetailPesanan(ctx context.Context, arg CreateDetailPesananParams) error {
+	_, err := q.db.ExecContext(ctx, createDetailPesanan, arg.PesananID, arg.MenuID, arg.Jumlah)
+	return err
+}
+
 const createKategori = `-- name: CreateKategori :exec
 INSERT INTO kategori (id, kategori) VALUES (DEFAULT, $1)
 `
@@ -38,4 +53,29 @@ type CreateMenuParams struct {
 func (q *Queries) CreateMenu(ctx context.Context, arg CreateMenuParams) error {
 	_, err := q.db.ExecContext(ctx, createMenu, arg.KategoriID, arg.Menu, arg.Harga)
 	return err
+}
+
+const createPesanan = `-- name: CreatePesanan :exec
+INSERT INTO pesanan (id, kode, meja_nomor, dipesan_pada) VALUES (DEFAULT, $1, $2, DEFAULT)
+`
+
+type CreatePesananParams struct {
+	Kode      string `json:"kode"`
+	MejaNomor int32  `json:"meja_nomor"`
+}
+
+func (q *Queries) CreatePesanan(ctx context.Context, arg CreatePesananParams) error {
+	_, err := q.db.ExecContext(ctx, createPesanan, arg.Kode, arg.MejaNomor)
+	return err
+}
+
+const getPesananID = `-- name: GetPesananID :one
+SELECT id FROM pesanan WHERE kode = $1
+`
+
+func (q *Queries) GetPesananID(ctx context.Context, kode string) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getPesananID, kode)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
 }
