@@ -10,7 +10,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewPostgres(config config.Config) (conn *postgres.Queries, err error) {
+type PostgreSQL struct {
+	Conn    *sql.DB
+	Queries *postgres.Queries
+}
+
+func NewPostgres(config config.Config) (postgreSQL PostgreSQL, err error) {
 	connInf := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		config.Db_host,
@@ -27,6 +32,7 @@ func NewPostgres(config config.Config) (conn *postgres.Queries, err error) {
 		return
 	}
 
-	conn = postgres.New(sqlconn)
+	postgreSQL.Conn = sqlconn
+	postgreSQL.Queries = postgres.New(sqlconn)
 	return
 }

@@ -26,6 +26,7 @@ type Menu struct {
 	ID         int32  `json:"id"`
 	KategoriID int32  `json:"kategori_id"`
 	Menu       string `json:"menu"`
+	Harga      int32  `json:"harga"`
 }
 
 type Pesanan struct {

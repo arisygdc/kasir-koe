@@ -5,15 +5,14 @@ CREATE TABLE meja (
 
 CREATE TABLE kategori (
     id SERIAL PRIMARY KEY,
-    kategori VARCHAR(20) NOT NULL,
-    PRIMARY KEY(id)
+    kategori VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE menu (
     id SERIAL PRIMARY KEY,
     kategori_id INT NOT NULL,
-    meja_nomor INT NOT NULL,
-    menu varchar(20) NOT NULL
+    menu varchar(20) NOT NULL,
+    harga INT NOT NULL
 );
 
 CREATE TABLE pesanan (
@@ -23,7 +22,7 @@ CREATE TABLE pesanan (
 );
 
 CREATE TABLE detail_pesanan (
-    pesanan_id INT PRIMARY KEY,
+    pesanan_id INT NOT NULL,
     menu_id INT NOT NULL,
     jumlah INT NOT NULL
 );

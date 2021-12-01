@@ -1,12 +1,14 @@
 package controller
 
-import "kasir/database/postgres"
+import (
+	"kasir/database"
+)
 
 type Controller struct {
-	Repo *postgres.Queries
+	Repo database.PostgreSQL
 }
 
-func NewController(dbconn *postgres.Queries) (controller *Controller) {
+func NewController(dbconn database.PostgreSQL) (controller *Controller) {
 	controller = new(Controller)
 	controller.Repo = dbconn
 	return

@@ -5,4 +5,4 @@ INSERT INTO meja (nomor, dibuat_pada) VALUES ($1, DEFAULT);
 INSERT INTO kategori (id, kategori) VALUES (DEFAULT, $1);
 
 -- name: CreateMenu :exec
-INSERT INTO menu (id, kategori_id, menu) VALUES (DEFAULT, $1, $2);
+INSERT INTO menu (id, kategori_id, menu, harga) VALUES (DEFAULT, $1, $2, $3);

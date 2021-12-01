@@ -14,6 +14,7 @@ CREATE TABLE menu (
     id SERIAL,
     kategori_id INT NOT NULL,
     menu varchar(20) NOT NULL,
+    harga INT NOT NULL,
     PRIMARY KEY(id)
 );
 

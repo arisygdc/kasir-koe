@@ -9,6 +9,7 @@ import (
 type CreateMenuReq struct {
 	Kategori_id int32  `json:"kategori_id" binding:"required"`
 	Menu        string `json:"menu" binding:"required"`
+	Harga       int32  `json:"harga" binding:"required"`
 }
 
 func (ctr *Controller) CreateMenu(ctx *gin.Context) {
@@ -20,11 +21,12 @@ func (ctr *Controller) CreateMenu(ctx *gin.Context) {
 		return
 	}
 
-	err := ctr.Repo.CreateMenu(
+	err := ctr.Repo.Queries.CreateMenu(
 		ctx,
 		postgres.CreateMenuParams{
 			KategoriID: req.Kategori_id,
 			Menu:       req.Menu,
+			Harga:      req.Harga,
 		},
 	)
 
