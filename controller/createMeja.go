@@ -17,7 +17,7 @@ func (ctr *Controller) CreateMeja(ctx *gin.Context) {
 		return
 	}
 
-	err := ctr.Repo.CreateMeja(ctx, req.Nomor)
+	err := ctr.Repo.Queries.CreateMeja(ctx, req.Nomor)
 	if err != nil {
 		ctx.JSON(403, gin.H{
 			"status": "forbidden",

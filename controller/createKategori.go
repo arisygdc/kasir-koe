@@ -15,7 +15,7 @@ func (ctr *Controller) CreateKategori(ctx *gin.Context) {
 		return
 	}
 
-	err := ctr.Repo.CreateKategori(ctx, req.Kategori)
+	err := ctr.Repo.Queries.CreateKategori(ctx, req.Kategori)
 	if err != nil {
 		ctx.JSON(403, gin.H{
 			"status": "forbidden",
