@@ -22,7 +22,7 @@ func main() {
 	controller := controller.NewController(repo)
 
 	r := server.SetupServer(config)
-	s := r.Server.Group("API")
+	s := r.Server.Group("API").Use(r.Authorization())
 	s.GET("/ping", controller.PingPong)
 	s.GET("/meja", controller.GetMeja)
 	s.GET("/menu", controller.GetMenu)

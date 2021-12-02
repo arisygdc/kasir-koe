@@ -25,3 +25,15 @@ func (R *Router) Run() {
 	addr := R.Config.ServerAddress
 	R.Server.Run(addr)
 }
+
+func (R *Router) Authorization() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		apiKey := c.Request.Header.Get("API-KEY")
+		if apiKey != R.Config.Api_key {
+			c.AbortWithStatusJSON(451, gin.H{
+				"status": "unavailable",
+			})
+		}
+		c.Next()
+	}
+}

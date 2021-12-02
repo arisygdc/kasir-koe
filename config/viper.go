@@ -16,7 +16,7 @@ type Config struct {
 	Db_password         string        `mapstructure:"DB_PASSWORD"`
 	Db_sslmode          string        `mapstructure:"DB_SSLMODE"`
 	ServerAddress       string        `mapstructure:"SERVER_ADDRESS"`
-	TokenSymetricKey    string        `mapstructure:"TOKEN_SYMETRIC_KEY"`
+	Api_key             string        `mapstructure:"API_KEY"`
 	AccessTokenDuration time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 }
 
