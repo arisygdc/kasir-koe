@@ -2,6 +2,7 @@ package controller
 
 import (
 	"kasir/database/postgres"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,7 @@ type CreatePesannReq struct {
 }
 
 func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
+	var mux sync.Mutex
 	var req CreatePesannReq
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(400, gin.H{
@@ -27,7 +29,11 @@ func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 		return
 	}
 
-	stmt := func(q *postgres.Queries) (err error) {
+	// Query flow
+	stmt := func(q *postgres.Queries) (total int32, err error) {
+		mux.Lock()
+		defer mux.Unlock()
+
 		err = q.CreatePesanan(
 			ctx, postgres.CreatePesananParams{
 				Kode:      req.Kode,
@@ -39,23 +45,30 @@ func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 			return
 		}
 
-		var pesanan_id int32
+		var pesanan_id, harga int32
 		pesanan_id, err = q.GetPesananID(ctx, req.Kode)
 		if err != nil {
 			return
 		}
 
 		for _, v := range req.Pesanan {
+			harga, err = q.GetHarga(ctx, v.Menu_id)
+			if err != nil {
+				return
+			}
+
 			err = q.CreateDetailPesanan(
 				ctx, postgres.CreateDetailPesananParams{
 					PesananID: pesanan_id,
 					MenuID:    v.Menu_id,
+					Harga:     harga,
 					Jumlah:    v.Jumlah,
 				},
 			)
 			if err != nil {
 				return
 			}
+			total += harga * v.Jumlah
 		}
 
 		return
@@ -70,7 +83,8 @@ func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 	}
 
 	q := postgres.New(tx)
-	err = stmt(q)
+	var total int32
+	total, err = stmt(q)
 	if err != nil {
 		rbErr := tx.Rollback()
 		if rbErr != nil {
@@ -79,6 +93,7 @@ func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 			})
 			return
 		}
+
 		ctx.JSON(403, gin.H{
 			"status": "forbidden",
 		})
@@ -89,5 +104,6 @@ func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 
 	ctx.JSON(201, gin.H{
 		"status": "created",
+		"total":  total,
 	})
 }

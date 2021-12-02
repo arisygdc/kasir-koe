@@ -13,8 +13,11 @@ INSERT INTO pesanan (id, kode, meja_nomor, dipesan_pada) VALUES (DEFAULT, $1, $2
 -- name: GetPesananID :one
 SELECT id FROM pesanan WHERE kode = $1;
 
+-- name: GetHarga :one
+SELECT harga FROM menu WHERE id = $1;
+
 -- name: CreateDetailPesanan :exec
-INSERT INTO detail_pesanan (pesanan_id, menu_id, jumlah) VALUES ($1, $2, $3);
+INSERT INTO detail_pesanan (pesanan_id, menu_id, harga, jumlah) VALUES ($1, $2, $3, $4);
 
 -- name: CreatePembayaran :exec
 INSERT INTO pembayaran (id, pesanan_id, bayar, dibayar_pada) VALUES (DEFAULT, $1, $2, DEFAULT);

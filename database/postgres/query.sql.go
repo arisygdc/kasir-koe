@@ -8,17 +8,23 @@ import (
 )
 
 const createDetailPesanan = `-- name: CreateDetailPesanan :exec
-INSERT INTO detail_pesanan (pesanan_id, menu_id, jumlah) VALUES ($1, $2, $3)
+INSERT INTO detail_pesanan (pesanan_id, menu_id, harga, jumlah) VALUES ($1, $2, $3, $4)
 `
 
 type CreateDetailPesananParams struct {
 	PesananID int32 `json:"pesanan_id"`
 	MenuID    int32 `json:"menu_id"`
+	Harga     int32 `json:"harga"`
 	Jumlah    int32 `json:"jumlah"`
 }
 
 func (q *Queries) CreateDetailPesanan(ctx context.Context, arg CreateDetailPesananParams) error {
-	_, err := q.db.ExecContext(ctx, createDetailPesanan, arg.PesananID, arg.MenuID, arg.Jumlah)
+	_, err := q.db.ExecContext(ctx, createDetailPesanan,
+		arg.PesananID,
+		arg.MenuID,
+		arg.Harga,
+		arg.Jumlah,
+	)
 	return err
 }
 
@@ -83,23 +89,23 @@ func (q *Queries) CreatePesanan(ctx context.Context, arg CreatePesananParams) er
 	return err
 }
 
+const getHarga = `-- name: GetHarga :one
+SELECT harga FROM menu WHERE id = $1
+`
+
+func (q *Queries) GetHarga(ctx context.Context, id int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getHarga, id)
+	var harga int32
+	err := row.Scan(&harga)
+	return harga, err
+}
+
 const getPesananID = `-- name: GetPesananID :one
 SELECT id FROM pesanan WHERE kode = $1
 `
 
 func (q *Queries) GetPesananID(ctx context.Context, kode string) (int32, error) {
 	row := q.db.QueryRowContext(ctx, getPesananID, kode)
-	var id int32
-	err := row.Scan(&id)
-	return id, err
-}
-
-const getStatusPemabayaran = `-- name: GetStatusPemabayaran :one
-SELECT id FROM pembayaran WHERE pesanan_id = $1
-`
-
-func (q *Queries) GetStatusPemabayaran(ctx context.Context, pesananID int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getStatusPemabayaran, pesananID)
 	var id int32
 	err := row.Scan(&id)
 	return id, err

@@ -9,6 +9,7 @@ import (
 type DetailPesanan struct {
 	PesananID int32 `json:"pesanan_id"`
 	MenuID    int32 `json:"menu_id"`
+	Harga     int32 `json:"harga"`
 	Jumlah    int32 `json:"jumlah"`
 }
 

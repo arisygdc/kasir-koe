@@ -25,6 +25,7 @@ CREATE TABLE pesanan (
 CREATE TABLE detail_pesanan (
     pesanan_id INT NOT NULL,
     menu_id INT NOT NULL,
+    harga INT NOT NULL,
     jumlah INT NOT NULL
 );
 
