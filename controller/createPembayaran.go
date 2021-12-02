@@ -23,7 +23,7 @@ func (ctr *Controller) CreatePembayaran(ctx *gin.Context) {
 	pesanan_id, err := ctr.Repo.Queries.GetPesananID(ctx, req.Kode)
 	if err != nil {
 		ctx.JSON(500, gin.H{
-			"status": "internal server error",
+			"status": "forbiden",
 		})
 		return
 	}
