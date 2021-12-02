@@ -63,8 +63,8 @@ func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 
 	tx, err := ctr.Repo.Conn.BeginTx(ctx, nil)
 	if err != nil {
-		ctx.JSON(403, gin.H{
-			"status": "forbidden",
+		ctx.JSON(500, gin.H{
+			"status": "internal server error",
 		})
 		return
 	}
