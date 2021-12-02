@@ -55,6 +55,20 @@ func (q *Queries) CreateMenu(ctx context.Context, arg CreateMenuParams) error {
 	return err
 }
 
+const createPembayaran = `-- name: CreatePembayaran :exec
+INSERT INTO pembayaran (id, pesanan_id, bayar, dibayar_pada) VALUES (DEFAULT, $1, $2, DEFAULT)
+`
+
+type CreatePembayaranParams struct {
+	PesananID int32 `json:"pesanan_id"`
+	Bayar     int32 `json:"bayar"`
+}
+
+func (q *Queries) CreatePembayaran(ctx context.Context, arg CreatePembayaranParams) error {
+	_, err := q.db.ExecContext(ctx, createPembayaran, arg.PesananID, arg.Bayar)
+	return err
+}
+
 const createPesanan = `-- name: CreatePesanan :exec
 INSERT INTO pesanan (id, kode, meja_nomor, dipesan_pada) VALUES (DEFAULT, $1, $2, DEFAULT)
 `
@@ -75,6 +89,17 @@ SELECT id FROM pesanan WHERE kode = $1
 
 func (q *Queries) GetPesananID(ctx context.Context, kode string) (int32, error) {
 	row := q.db.QueryRowContext(ctx, getPesananID, kode)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
+}
+
+const getStatusPemabayaran = `-- name: GetStatusPemabayaran :one
+SELECT id FROM pembayaran WHERE pesanan_id = $1
+`
+
+func (q *Queries) GetStatusPemabayaran(ctx context.Context, pesananID int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getStatusPemabayaran, pesananID)
 	var id int32
 	err := row.Scan(&id)
 	return id, err

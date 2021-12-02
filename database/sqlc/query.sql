@@ -15,3 +15,6 @@ SELECT id FROM pesanan WHERE kode = $1;
 
 -- name: CreateDetailPesanan :exec
 INSERT INTO detail_pesanan (pesanan_id, menu_id, jumlah) VALUES ($1, $2, $3);
+
+-- name: CreatePembayaran :exec
+INSERT INTO pembayaran (id, pesanan_id, bayar, dibayar_pada) VALUES (DEFAULT, $1, $2, DEFAULT);

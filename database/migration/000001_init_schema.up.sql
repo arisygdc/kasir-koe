@@ -45,3 +45,15 @@ CREATE TABLE detail_pesanan (
         FOREIGN KEY (menu_id)
         REFERENCES menu(id)
 );
+
+CREATE TABLE pembayaran (
+    id SERIAL,
+    pesanan_id INT NOT NULL UNIQUE,
+    bayar INT NOT NULL,
+    dibayar_pada timestamp DEFAULT NOW(),
+    PRIMARY KEY(id),
+
+    CONSTRAINT pesanan
+        FOREIGN KEY (pesanan_id)
+        REFERENCES pesanan(id)
+);

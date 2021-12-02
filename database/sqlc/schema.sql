@@ -27,3 +27,10 @@ CREATE TABLE detail_pesanan (
     menu_id INT NOT NULL,
     jumlah INT NOT NULL
 );
+
+CREATE TABLE pembayaran (
+    id SERIAL PRIMARY KEY,
+    pesanan_id INT NOT NULL,
+    bayar INT NOT NULL,
+    dibayar_pada timestamp DEFAULT NOW()
+);

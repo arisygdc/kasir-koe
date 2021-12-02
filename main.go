@@ -27,6 +27,7 @@ func main() {
 	s.POST("/meja", controller.CreateMeja)
 	s.POST("/kategori", controller.CreateKategori)
 	s.POST("/menu", controller.CreateMenu)
-	s.POST("/pesanan", controller.CreatePesanan)
+	s.POST("/pesan", controller.CreatePesanan)
+	s.POST("/bayar", controller.CreatePembayaran)
 	r.Run()
 }
