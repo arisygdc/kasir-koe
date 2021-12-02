@@ -161,6 +161,47 @@ func (q *Queries) GetMenuAll(ctx context.Context) ([]GetMenuAllRow, error) {
 	return items, nil
 }
 
+const getPesananHistory = `-- name: GetPesananHistory :many
+SELECT kode, meja_nomor, dipesan_pada, bayar, dibayar_pada FROM pesanan LEFT JOIN pembayaran ON pesanan.id = pembayaran.pesanan_id
+`
+
+type GetPesananHistoryRow struct {
+	Kode        string        `json:"kode"`
+	MejaNomor   int32         `json:"meja_nomor"`
+	DipesanPada sql.NullTime  `json:"dipesan_pada"`
+	Bayar       sql.NullInt32 `json:"bayar"`
+	DibayarPada sql.NullTime  `json:"dibayar_pada"`
+}
+
+func (q *Queries) GetPesananHistory(ctx context.Context) ([]GetPesananHistoryRow, error) {
+	rows, err := q.db.QueryContext(ctx, getPesananHistory)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetPesananHistoryRow
+	for rows.Next() {
+		var i GetPesananHistoryRow
+		if err := rows.Scan(
+			&i.Kode,
+			&i.MejaNomor,
+			&i.DipesanPada,
+			&i.Bayar,
+			&i.DibayarPada,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getPesananID = `-- name: GetPesananID :one
 SELECT id FROM pesanan WHERE kode = $1
 `

@@ -27,3 +27,8 @@ INSERT INTO detail_pesanan (pesanan_id, menu_id, harga, jumlah) VALUES ($1, $2, 
 
 -- name: CreatePembayaran :exec
 INSERT INTO pembayaran (id, pesanan_id, bayar, dibayar_pada) VALUES (DEFAULT, $1, $2, DEFAULT);
+
+-- name: GetPesananHistory :many
+SELECT kode, meja_nomor, dipesan_pada, bayar, dibayar_pada FROM pesanan 
+LEFT JOIN pembayaran ON pesanan.id = pembayaran.pesanan_id 
+where pesanan.dipesan_pada::date = date $1;

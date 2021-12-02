@@ -26,6 +26,7 @@ func main() {
 	s.GET("/ping", controller.PingPong)
 	s.GET("/meja", controller.GetMeja)
 	s.GET("/menu", controller.GetMenu)
+	s.GET("/riwayat/pesanan", controller.GetPesananHistory)
 	s.POST("/meja", controller.CreateMeja)
 	s.POST("/kategori", controller.CreateKategori)
 	s.POST("/menu", controller.CreateMenu)
