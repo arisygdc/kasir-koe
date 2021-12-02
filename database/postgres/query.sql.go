@@ -100,6 +100,33 @@ func (q *Queries) GetHarga(ctx context.Context, id int32) (int32, error) {
 	return harga, err
 }
 
+const getMejaAll = `-- name: GetMejaAll :many
+SELECT nomor FROM meja
+`
+
+func (q *Queries) GetMejaAll(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMejaAll)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var nomor int32
+		if err := rows.Scan(&nomor); err != nil {
+			return nil, err
+		}
+		items = append(items, nomor)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getPesananID = `-- name: GetPesananID :one
 SELECT id FROM pesanan WHERE kode = $1
 `
