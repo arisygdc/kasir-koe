@@ -10,6 +10,9 @@ INSERT INTO kategori (id, kategori) VALUES (DEFAULT, $1);
 -- name: CreateMenu :exec
 INSERT INTO menu (id, kategori_id, menu, harga) VALUES (DEFAULT, $1, $2, $3);
 
+-- name: GetMenuAll :many
+SELECT kategori, menu, harga FROM menu RIGHT JOIN kategori ON menu.kategori_id = kategori.id;
+
 -- name: CreatePesanan :exec
 INSERT INTO pesanan (id, kode, meja_nomor, dipesan_pada) VALUES (DEFAULT, $1, $2, DEFAULT);
 

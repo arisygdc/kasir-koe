@@ -5,6 +5,7 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 )
 
 const createDetailPesanan = `-- name: CreateDetailPesanan :exec
@@ -117,6 +118,39 @@ func (q *Queries) GetMejaAll(ctx context.Context) ([]int32, error) {
 			return nil, err
 		}
 		items = append(items, nomor)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMenuAll = `-- name: GetMenuAll :many
+SELECT kategori, menu, harga FROM menu RIGHT JOIN kategori ON menu.kategori_id = kategori.id
+`
+
+type GetMenuAllRow struct {
+	Kategori string         `json:"kategori"`
+	Menu     sql.NullString `json:"menu"`
+	Harga    sql.NullInt32  `json:"harga"`
+}
+
+func (q *Queries) GetMenuAll(ctx context.Context) ([]GetMenuAllRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMenuAll)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMenuAllRow
+	for rows.Next() {
+		var i GetMenuAllRow
+		if err := rows.Scan(&i.Kategori, &i.Menu, &i.Harga); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
