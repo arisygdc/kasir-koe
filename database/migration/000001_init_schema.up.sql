@@ -20,7 +20,7 @@ CREATE TABLE menu (
 
 CREATE TABLE pesanan (
     id SERIAL,
-    kode VARCHAR(5) NOT NULL,
+    kode VARCHAR(10) NOT NULL UNIQUE,
     meja_nomor INT NOT NULL,
     dipesan_pada timestamp DEFAULT NOW(),
     PRIMARY KEY(id),
