@@ -1,3 +1,7 @@
+# KASIR KOE
+
+project iseng iseng aja
+
 ## Flow Pembelian
 - konsumen mengambil meja dengan scan qrcode meja
 - konsumen mengakses web dengan query url meja
@@ -11,8 +15,3 @@
 - menambahkan kategori
 - menambahkan menu berdasarkan kategori
 - melihat history pemesanan (filter)
-
-## Todo
-### Backend
-- create database
-- setup jwt, and api
