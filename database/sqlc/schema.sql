@@ -1,6 +1,6 @@
 CREATE TABLE meja (
     nomor INT PRIMARY KEY,
-    dibuat_pada timestamp DEFAULT NOW()
+    dibuat_pada timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE kategori (
@@ -19,7 +19,7 @@ CREATE TABLE pesanan (
     id SERIAL PRIMARY KEY,
     kode VARCHAR(5) NOT NULL,
     meja_nomor INT NOT NULL,
-    dipesan_pada timestamp DEFAULT NOW()
+    dipesan_pada timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE detail_pesanan (
@@ -33,5 +33,5 @@ CREATE TABLE pembayaran (
     id SERIAL PRIMARY KEY,
     pesanan_id INT NOT NULL,
     bayar INT NOT NULL,
-    dibayar_pada timestamp DEFAULT NOW()
+    dibayar_pada timestamp NOT NULL DEFAULT NOW()
 );

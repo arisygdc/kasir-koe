@@ -31,4 +31,4 @@ INSERT INTO pembayaran (id, pesanan_id, bayar, dibayar_pada) VALUES (DEFAULT, $1
 -- name: GetPesananHistory :many
 SELECT kode, meja_nomor, dipesan_pada, bayar, dibayar_pada FROM pesanan 
 LEFT JOIN pembayaran ON pesanan.id = pembayaran.pesanan_id 
-where pesanan.dipesan_pada::date = date $1;
+where pesanan.dipesan_pada::date = date @date;

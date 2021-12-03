@@ -3,7 +3,7 @@
 package postgres
 
 import (
-	"database/sql"
+	"time"
 )
 
 type DetailPesanan struct {
@@ -19,8 +19,8 @@ type Kategori struct {
 }
 
 type Meja struct {
-	Nomor      int32        `json:"nomor"`
-	DibuatPada sql.NullTime `json:"dibuat_pada"`
+	Nomor      int32     `json:"nomor"`
+	DibuatPada time.Time `json:"dibuat_pada"`
 }
 
 type Menu struct {
@@ -31,15 +31,15 @@ type Menu struct {
 }
 
 type Pembayaran struct {
-	ID          int32        `json:"id"`
-	PesananID   int32        `json:"pesanan_id"`
-	Bayar       int32        `json:"bayar"`
-	DibayarPada sql.NullTime `json:"dibayar_pada"`
+	ID          int32     `json:"id"`
+	PesananID   int32     `json:"pesanan_id"`
+	Bayar       int32     `json:"bayar"`
+	DibayarPada time.Time `json:"dibayar_pada"`
 }
 
 type Pesanan struct {
-	ID          int32        `json:"id"`
-	Kode        string       `json:"kode"`
-	MejaNomor   int32        `json:"meja_nomor"`
-	DipesanPada sql.NullTime `json:"dipesan_pada"`
+	ID          int32     `json:"id"`
+	Kode        string    `json:"kode"`
+	MejaNomor   int32     `json:"meja_nomor"`
+	DipesanPada time.Time `json:"dipesan_pada"`
 }

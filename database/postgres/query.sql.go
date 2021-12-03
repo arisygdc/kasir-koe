@@ -6,6 +6,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const createDetailPesanan = `-- name: CreateDetailPesanan :exec
@@ -162,19 +163,21 @@ func (q *Queries) GetMenuAll(ctx context.Context) ([]GetMenuAllRow, error) {
 }
 
 const getPesananHistory = `-- name: GetPesananHistory :many
-SELECT kode, meja_nomor, dipesan_pada, bayar, dibayar_pada FROM pesanan LEFT JOIN pembayaran ON pesanan.id = pembayaran.pesanan_id
+SELECT kode, meja_nomor, dipesan_pada, bayar, dibayar_pada FROM pesanan 
+LEFT JOIN pembayaran ON pesanan.id = pembayaran.pesanan_id 
+where pesanan.dipesan_pada::date = $1
 `
 
 type GetPesananHistoryRow struct {
 	Kode        string        `json:"kode"`
 	MejaNomor   int32         `json:"meja_nomor"`
-	DipesanPada sql.NullTime  `json:"dipesan_pada"`
+	DipesanPada time.Time     `json:"dipesan_pada"`
 	Bayar       sql.NullInt32 `json:"bayar"`
 	DibayarPada sql.NullTime  `json:"dibayar_pada"`
 }
 
-func (q *Queries) GetPesananHistory(ctx context.Context) ([]GetPesananHistoryRow, error) {
-	rows, err := q.db.QueryContext(ctx, getPesananHistory)
+func (q *Queries) GetPesananHistory(ctx context.Context, date time.Time) ([]GetPesananHistoryRow, error) {
+	rows, err := q.db.QueryContext(ctx, getPesananHistory, date)
 	if err != nil {
 		return nil, err
 	}
