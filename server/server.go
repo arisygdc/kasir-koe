@@ -18,6 +18,8 @@ func SetupServer(config config.Config) (r *Router) {
 		Config: config,
 		Server: server,
 	}
+
+	r.Server.MaxMultipartMemory = 8 << 20
 	return
 }
 

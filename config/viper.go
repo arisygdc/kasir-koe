@@ -4,6 +4,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+const pathImageMenu = "./public/images/menu"
+
 type Config struct {
 	Db_driver     string `mapstructure:"DB_DRIVER"`
 	Db_source     string `mapstructure:"PG_SOURCE"`
@@ -29,4 +31,8 @@ func LoadConfig(path string) (config Config, err error) {
 
 	err = viper.Unmarshal(&config)
 	return
+}
+
+func GetPathImageMenu() string {
+	return pathImageMenu
 }

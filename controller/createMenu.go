@@ -25,8 +25,7 @@ func (ctr *Controller) CreateMenu(ctx *gin.Context) {
 	}
 
 	err := ctr.Repo.Queries.CreateMenu(
-		ctx,
-		postgres.CreateMenuParams{
+		ctx, postgres.CreateMenuParams{
 			KategoriID: req.Kategori_id,
 			Menu:       req.Menu,
 			Foto:       req.Foto,
