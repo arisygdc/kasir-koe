@@ -12,6 +12,9 @@ CREATE TABLE menu (
     id SERIAL PRIMARY KEY,
     kategori_id INT NOT NULL,
     menu varchar(20) NOT NULL,
+    deskripsi varchar(150) NOT NULL,
+    foto varchar(50) NOT NULL,
+    tersedia boolean NOT NULL DEFAULT true,
     harga INT NOT NULL
 );
 

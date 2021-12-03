@@ -8,7 +8,7 @@ SELECT nomor FROM meja;
 INSERT INTO kategori (id, kategori) VALUES (DEFAULT, $1);
 
 -- name: CreateMenu :exec
-INSERT INTO menu (id, kategori_id, menu, harga) VALUES (DEFAULT, $1, $2, $3);
+INSERT INTO menu (id, kategori_id, menu, foto, deskripsi, tersedia, harga) VALUES (DEFAULT, $1, $2, $3, $4, $5, $6);
 
 -- name: GetMenuAll :many
 SELECT kategori, menu, harga FROM menu RIGHT JOIN kategori ON menu.kategori_id = kategori.id;

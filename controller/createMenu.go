@@ -9,6 +9,9 @@ import (
 type CreateMenuReq struct {
 	Kategori_id int32  `json:"kategori_id" binding:"required"`
 	Menu        string `json:"menu" binding:"required"`
+	Foto        string `json:"foto" binding:"required"`
+	Deskripsi   string `json:"deskripsi" binding:"required"`
+	Tersedia    bool   `json:"tersedia" binding:"required"`
 	Harga       int32  `json:"harga" binding:"required"`
 }
 
@@ -26,6 +29,9 @@ func (ctr *Controller) CreateMenu(ctx *gin.Context) {
 		postgres.CreateMenuParams{
 			KategoriID: req.Kategori_id,
 			Menu:       req.Menu,
+			Foto:       req.Foto,
+			Deskripsi:  req.Deskripsi,
+			Tersedia:   req.Tersedia,
 			Harga:      req.Harga,
 		},
 	)

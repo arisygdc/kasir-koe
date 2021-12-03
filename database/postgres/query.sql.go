@@ -49,17 +49,27 @@ func (q *Queries) CreateMeja(ctx context.Context, nomor int32) error {
 }
 
 const createMenu = `-- name: CreateMenu :exec
-INSERT INTO menu (id, kategori_id, menu, harga) VALUES (DEFAULT, $1, $2, $3)
+INSERT INTO menu (id, kategori_id, menu, foto, deskripsi, tersedia, harga) VALUES (DEFAULT, $1, $2, $3, $4, $5, $6)
 `
 
 type CreateMenuParams struct {
 	KategoriID int32  `json:"kategori_id"`
 	Menu       string `json:"menu"`
+	Foto       string `json:"foto"`
+	Deskripsi  string `json:"deskripsi"`
+	Tersedia   bool   `json:"tersedia"`
 	Harga      int32  `json:"harga"`
 }
 
 func (q *Queries) CreateMenu(ctx context.Context, arg CreateMenuParams) error {
-	_, err := q.db.ExecContext(ctx, createMenu, arg.KategoriID, arg.Menu, arg.Harga)
+	_, err := q.db.ExecContext(ctx, createMenu,
+		arg.KategoriID,
+		arg.Menu,
+		arg.Foto,
+		arg.Deskripsi,
+		arg.Tersedia,
+		arg.Harga,
+	)
 	return err
 }
 
@@ -165,7 +175,7 @@ func (q *Queries) GetMenuAll(ctx context.Context) ([]GetMenuAllRow, error) {
 const getPesananHistory = `-- name: GetPesananHistory :many
 SELECT kode, meja_nomor, dipesan_pada, bayar, dibayar_pada FROM pesanan 
 LEFT JOIN pembayaran ON pesanan.id = pembayaran.pesanan_id 
-where pesanan.dipesan_pada::date = $1
+where pesanan.dipesan_pada::date = date $1
 `
 
 type GetPesananHistoryRow struct {
