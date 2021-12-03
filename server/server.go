@@ -30,8 +30,8 @@ func (R *Router) Authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		apiKey := c.Request.Header.Get("API-KEY")
 		if apiKey != R.Config.Api_key {
-			c.AbortWithStatusJSON(451, gin.H{
-				"status": "unavailable",
+			c.AbortWithStatusJSON(401, gin.H{
+				"status": "unauthorize",
 			})
 		}
 		c.Next()
