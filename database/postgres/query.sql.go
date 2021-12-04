@@ -74,16 +74,17 @@ func (q *Queries) CreateMenu(ctx context.Context, arg CreateMenuParams) error {
 }
 
 const createPembayaran = `-- name: CreatePembayaran :exec
-INSERT INTO pembayaran (id, pesanan_id, bayar, dibayar_pada) VALUES (DEFAULT, $1, $2, DEFAULT)
+INSERT INTO pembayaran (id, pesanan_id, bayar, dibayar_pada) VALUES (DEFAULT, $1, $2, $3)
 `
 
 type CreatePembayaranParams struct {
-	PesananID int32 `json:"pesanan_id"`
-	Bayar     int32 `json:"bayar"`
+	PesananID   int32     `json:"pesanan_id"`
+	Bayar       int32     `json:"bayar"`
+	DibayarPada time.Time `json:"dibayar_pada"`
 }
 
 func (q *Queries) CreatePembayaran(ctx context.Context, arg CreatePembayaranParams) error {
-	_, err := q.db.ExecContext(ctx, createPembayaran, arg.PesananID, arg.Bayar)
+	_, err := q.db.ExecContext(ctx, createPembayaran, arg.PesananID, arg.Bayar, arg.DibayarPada)
 	return err
 }
 
@@ -170,6 +171,44 @@ func (q *Queries) GetMenuAll(ctx context.Context) ([]GetMenuAllRow, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const getPembayaranID = `-- name: GetPembayaranID :one
+SELECT id FROM pembayaran WHERE pesanan_id = $1
+`
+
+func (q *Queries) GetPembayaranID(ctx context.Context, pesananID int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getPembayaranID, pesananID)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
+}
+
+const getPesananByKD = `-- name: GetPesananByKD :one
+SELECT p.id, p.meja_nomor, p.dipesan_pada, sum(dp.jumlah) as item, sum(dp.harga*dp.jumlah) as total FROM pesanan p 
+LEFT JOIN detail_pesanan dp ON p.id = dp.pesanan_id 
+where p.kode = $1 GROUP BY p.id
+`
+
+type GetPesananByKDRow struct {
+	ID          int32     `json:"id"`
+	MejaNomor   int32     `json:"meja_nomor"`
+	DipesanPada time.Time `json:"dipesan_pada"`
+	Item        int64     `json:"item"`
+	Total       int64     `json:"total"`
+}
+
+func (q *Queries) GetPesananByKD(ctx context.Context, kode string) (GetPesananByKDRow, error) {
+	row := q.db.QueryRowContext(ctx, getPesananByKD, kode)
+	var i GetPesananByKDRow
+	err := row.Scan(
+		&i.ID,
+		&i.MejaNomor,
+		&i.DipesanPada,
+		&i.Item,
+		&i.Total,
+	)
+	return i, err
 }
 
 const getPesananHistory = `-- name: GetPesananHistory :many

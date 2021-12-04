@@ -20,6 +20,11 @@ type CreatePesannReq struct {
 	Pesanan    []DetailPesanan `form:"colors[]" json:"pesanan" binding:"required"`
 }
 
+type CreatePesananRes struct {
+	Kode  string
+	Total int32
+}
+
 func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 	var req CreatePesannReq
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -60,7 +65,10 @@ func (ctr *Controller) CreatePesanan(ctx *gin.Context) {
 
 	ctx.JSON(201, gin.H{
 		"status": "created",
-		"total":  total,
+		"data": CreatePesananRes{
+			Kode:  req.Kode,
+			Total: total,
+		},
 	})
 }
 
